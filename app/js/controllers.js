@@ -64,4 +64,3 @@ function InstagramAuthController($location, InstagramToken){
     $location.hash('').path('/home');
 }
 InstagramAuthController.$inject = ['$location', 'InstagramToken'];
-

@@ -7,8 +7,8 @@
 // In this case it is a simple value service.
 angular.module('myApp.services', []).
   value('version', '0.1').
-  value('instagram_search_url', 'https://api.instagram.com/v1/media/search').
-  factory('InstagramToken', ['$cookies', function($cookies) {
+  value('piURL', 'https://sso.rumba.int.pearsoncmg.com/sso/samlValidate').
+  factory('validateToken', ['$cookies', function($cookies) {
     var token;
     return function(tkn){
         if(tkn){
