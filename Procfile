@@ -1,11 +1,1 @@
-{
-  "name": "node-example",
-  "version": "0.0.1",
-  "dependencies": {
-    "express": "3.1.x"
-  },
-  "engines": {
-    "node": "0.10.x",
-    "npm": "1.2.x"
-  }
-}
+web: node web.js

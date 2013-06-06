@@ -1,16 +1,11 @@
 {
-  "name": "yes",
-  "version": "0.0.0",
-  "description": "ERROR: No README data found!",
-  "main": "web.js",
+  "name": "node-example",
+  "version": "0.0.1",
   "dependencies": {
-    "node-static": "~0.6.5"
+    "express": "3.1.x"
   },
-  "devDependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": "",
-  "author": "",
-  "license": "BSD"
+  "engines": {
+    "node": "0.10.x",
+    "npm": "1.2.x"
+  }
 }
