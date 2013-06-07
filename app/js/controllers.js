@@ -96,7 +96,7 @@ function InstagramAuthController($location, $http, $scope, InstagramToken, userL
 
         console.log($http.jsonp(userLikeBookUrl,config)); //Get book with isbn and pass that
         $http.jsonp(userNextUrl,config2).success(successCallback); //Get book with isbn and pass that
-        $location.hash('').path('/samples');
+        $location.hash('').path('/Samples');
     };
 }
 InstagramAuthController.$inject = ['$location', '$http', '$scope', 'InstagramToken', 'userLikeBookUrl', 'userNextUrl','userCreateUrl'];
