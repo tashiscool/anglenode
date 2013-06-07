@@ -65,7 +65,13 @@ function InstagramAuthController($location, InstagramToken, userLikeBookUrl, use
         piId = resp.data.id
         $scope.token = InstagramToken(piId);
     }
-    $http.jsonp(userNextUrl,config2).success(storeUserId);
+    var config3 = {
+            params: {
+                ticket: hash,
+                callback: 'JSON_CALLBACK'
+            }
+        };
+    $http.jsonp(userCreateUrl,config3).success(storeUserId);
 
     var successCallback = function(resp, status, headers, config){
         console.log(resp);
@@ -95,4 +101,4 @@ function InstagramAuthController($location, InstagramToken, userLikeBookUrl, use
         $location.hash('').path('/samples');
     };
 }
-InstagramAuthController.$inject = ['$location', 'InstagramToken', 'userLikeBookUrl', 'userNextUrl'];
+InstagramAuthController.$inject = ['$location', 'InstagramToken', 'userLikeBookUrl', 'userNextUrl','userCreateUrl'];
