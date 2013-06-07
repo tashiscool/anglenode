@@ -56,7 +56,6 @@ HomeController.$inject = ['$scope', '$http', 'InstagramToken', 'instagram_search
 function InstagramAuthController($location, InstagramToken, userLikeBookUrl, userNextUrl, userCreateUrl){
     var hash = $location.search('ticket');
     console.log(hash);
-    $scope.token = InstagramToken(hash.substr(hash.indexOf('=')+1));
 
     //get samlValidate link/redeem token for piId
 
