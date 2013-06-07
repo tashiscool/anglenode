@@ -7,8 +7,9 @@ angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.directives', 
         $location.html5Mode(true).hashPrefix('!'); //now there won't be a hashbang within URLs for browers that support HTML5 history
     }]).
   config(['$routeProvider', function($routeProvider) {
-    $routeProvider.when('/findBook', {templateUrl: 'partials/findBook.html', controller: HomeController});
-    $routeProvider.when('/Samples', {templateUrl:'partials/samples.html', controller: InstagramAuthController})
-    $routeProvider.otherwise({redirectTo: 'https://sso.rumba.int.pearsoncmg.com/sso/login?service=http://floating-peak-4593.herokuapp.com/'});
+    $routeProvider.when('/findBook', {templateUrl: 'partials/findBook.html', controller: InstagramAuthController});
+    $routeProvider.when('/Samples', {templateUrl:'partials/samples.html', controller: HomeController});
+    $routeProvider.when('/auth', {templateUrl:'partials/auth.html'});
+    $routeProvider.otherwise({redirectTo: 'auth'});
   }])
   ;

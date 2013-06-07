@@ -3,64 +3,92 @@
 /* Controllers */
 
 
-function HomeController($scope, $http, InstagramToken, instagram_search_url) {
-    //get instagram link
+function HomeController($scope, $http, InstagramToken, instagram_search_url,userLikeBookUrl, userDisLikeBookUrl,
+                        userNextUrl) {
     $scope.token = InstagramToken();
 
-    //geolocation stuff!
-    var geoError = function(error){
-        var errors = {
-            1: 'Permission denied',
-            2: 'Position unavailable',
-            3: 'Request timeout'
-        };
-        $scope.positionError = ("Error: " + errors[error.code]);
-    };
-    var positionAcquired = function(position){
-        console.log('position acquired', position);
-        searchImages(position);
-    };
-    var geolocate = function(){
-        if ($scope.token && navigator.geolocation) {
-            var timeoutVal = 10 * 1000 * 1000;
-            navigator.geolocation.getCurrentPosition(
-                positionAcquired,
-                geoError,
-                { enableHighAccuracy: true, timeout: timeoutVal, maximumAge: 0 }
-            );
-        }
-        else {
 
-        }
-    };
-    geolocate();
-
-    //grab the images and process them
-    var successCallback = function(resp, status, headers, config){
-        console.log(resp);
-        $scope.images = resp.data;
-    };
-    var searchImages = function(position){
-        //https://api.instagram.com/v1/media/search?lat=48.858844&lng=2.294351&?access_token=249962630.f59def8.4c1defa23e9c4c8e969c299d84029f8e
+    $scope.userLike = function (bookisbn){
         var config = {
             params: {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude,
-                access_token: InstagramToken(),
-                callback: 'JSON_CALLBACK',
-                count: 50
+                isbn : isbnStr,
+                userid: hash.substr(hash.indexOf('=')+1),
+                callback: 'JSON_CALLBACK'
             }
         };
-        $http.jsonp(instagram_search_url, config).success(successCallback);
-    }
+        console.log($http.jsonp(userLikeBookUrl,config));
+    };
 
+    $scope.userDisLike = function (bookisbn){
+        var config = {
+            params: {
+                isbn : isbnStr,
+                userid: hash.substr(hash.indexOf('=')+1),
+                callback: 'JSON_CALLBACK'
+            }
+        };
+        console.log($http.jsonp(userDisLikeBookUrl,config));
+        $scope.userNext();
+    };
+
+    $scope.userNext = function (){
+
+        var successCallback = function(resp, status, headers, config){
+            console.log(resp);
+            $scope.book = resp.data;
+        };
+        var config2 = {
+            params: {
+                userid: hash.substr(hash.indexOf('=')+1),
+                callback: 'JSON_CALLBACK'
+            }
+        };
+        $http.jsonp(userNextUrl,config2).success(successCallback); //Get book with isbn and pass that
+        $location.hash('').path('/samples');
+    };
+
+    $scope.userNext();
 
 }
-HomeController.$inject = ['$scope', '$http', 'InstagramToken', 'instagram_search_url'];
+HomeController.$inject = ['$scope', '$http', 'InstagramToken', 'instagram_search_url','userLikeBookUrl',
+    'userDisLikeBookUrl', 'userNextUrl'];
 
-function InstagramAuthController($location, InstagramToken){
-    var hash = $location.hash();
-    InstagramToken(hash.substr(hash.indexOf('=')+1));
-    $location.hash('').path('/home');
+function InstagramAuthController($location, InstagramToken, userLikeBookUrl, userNextUrl, userCreateUrl){
+    var hash = $location.search('ticket');
+    console.log(hash);
+    $scope.token = InstagramToken(hash.substr(hash.indexOf('=')+1));
+
+    //get samlValidate link/redeem token for piId
+
+    var piId = hash.substr(hash.indexOf('=')+1);
+
+
+    var successCallback = function(resp, status, headers, config){
+        console.log(resp);
+        $scope.book = resp.data;
+    };
+
+    $scope.firstBook = function(isbnStr){
+        var config = {
+            params: {
+                isbn : isbnStr,
+                userid: piId,
+                callback: 'JSON_CALLBACK'
+            }
+        };
+        var config2 = {
+            params: {
+                userid: piId,
+                callback: 'JSON_CALLBACK'
+            }
+        };
+
+        //this is where we'd "create" the user in our cassandra
+        //since our service is supporting upsert it would really just be that
+
+        console.log($http.jsonp(userLikeBookUrl,config)); //Get book with isbn and pass that
+        $http.jsonp(userNextUrl,config2).success(successCallback); //Get book with isbn and pass that
+        $location.hash('').path('/samples');
+    };
 }
-InstagramAuthController.$inject = ['$location', 'InstagramToken'];
+InstagramAuthController.$inject = ['$location', 'InstagramToken', 'userLikeBookUrl', 'userNextUrl'];
