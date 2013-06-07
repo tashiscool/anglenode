@@ -8,7 +8,7 @@
 //This is basically registering globals/singletons
 angular.module('myApp.services', []).
   value('version', '0.1').
-  value('instagram_search_url', 'https://sso.rumba.int.pearsoncmg.com/sso/samlValidate').
+  value('instagram_search_url', '/api/validate').
   value('userLikeBookUrl', 'http://enigmatic-mountain-8364.herokuapp.com/user/{userid}/dislike/{isbn}').
   value('userNextUrl', 'http://enigmatic-mountain-8364.herokuapp.com/user/{userid}/next').
   value('userDisLikeBookUrl', 'http://enigmatic-mountain-8364.herokuapp.com/user/{userid}/dislike/{isbn}').

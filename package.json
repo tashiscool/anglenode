@@ -4,7 +4,8 @@
   "description": "ERROR: No README data found!",
   "main": "web.js",
   "dependencies": {
-    "node-static": "~0.6.5"
+    "node-static": "~0.6.5",
+    "express": "~3.2.6"
   },
   "devDependencies": {},
   "scripts": {
