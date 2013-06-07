@@ -30,7 +30,7 @@ function HomeController($location, $scope, $http, InstagramToken, instagram_sear
             }
         };
         $http.jsonp(userNextUrl,config2).success(successCallback); //Get book with isbn and pass that
-        $location.hash('').path('/samples');
+        $location.hash('').path('/Samples');
     };
 
     $scope.userDisLike = function (bookisbn){
