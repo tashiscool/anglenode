@@ -3,10 +3,8 @@
 /* Controllers */
 
 
-function HomeController($scope, $http, InstagramToken, instagram_search_url,userLikeBookUrl, userDisLikeBookUrl,
+function HomeController($location, $scope, $http, InstagramToken, instagram_search_url,userLikeBookUrl, userDisLikeBookUrl,
                         userNextUrl) {
-    $scope.token = InstagramToken();
-
 
     $scope.userLike = function (bookisbn){
         var config = {
@@ -17,18 +15,6 @@ function HomeController($scope, $http, InstagramToken, instagram_search_url,user
             }
         };
         console.log($http.jsonp(userLikeBookUrl,config));
-    };
-
-    $scope.userDisLike = function (bookisbn){
-        var config = {
-            params: {
-                isbn : isbnStr,
-                userid: $scope.token,
-                callback: 'JSON_CALLBACK'
-            }
-        };
-        console.log($http.jsonp(userDisLikeBookUrl,config));
-        $scope.userNext();
     };
 
     $scope.userNext = function (){
@@ -47,19 +33,32 @@ function HomeController($scope, $http, InstagramToken, instagram_search_url,user
         $location.hash('').path('/samples');
     };
 
+    $scope.userDisLike = function (bookisbn){
+        var config = {
+            params: {
+                isbn : isbnStr,
+                userid: $scope.token,
+                callback: 'JSON_CALLBACK'
+            }
+        };
+        console.log($http.jsonp(userDisLikeBookUrl,config));
+        $scope.userNext();
+    };
+
+  
+
     $scope.userNext();
 
 }
-HomeController.$inject = ['$scope', '$http', 'InstagramToken', 'instagram_search_url','userLikeBookUrl',
+HomeController.$inject = ['$location', '$scope', '$http', 'InstagramToken', 'instagram_search_url','userLikeBookUrl',
     'userDisLikeBookUrl', 'userNextUrl'];
 
-function InstagramAuthController($location, InstagramToken, userLikeBookUrl, userNextUrl, userCreateUrl){
+function InstagramAuthController($location, $http, $scope, InstagramToken, userLikeBookUrl, userNextUrl, userCreateUrl){
     var hash = $location.search('ticket');
-    console.log(hash);
 
     //get samlValidate link/redeem token for piId
 
-    var piId = hash.substr(hash.indexOf('=')+1);
+    var piId = hash;
     var storeUserId = function(resp, status, headers, config){
         piId = resp.data.id;
         $scope.token = InstagramToken(piId);
@@ -100,4 +99,4 @@ function InstagramAuthController($location, InstagramToken, userLikeBookUrl, use
         $location.hash('').path('/samples');
     };
 }
-InstagramAuthController.$inject = ['$location', 'InstagramToken', 'userLikeBookUrl', 'userNextUrl','userCreateUrl'];
+InstagramAuthController.$inject = ['$location', '$http', '$scope', 'InstagramToken', 'userLikeBookUrl', 'userNextUrl','userCreateUrl'];
