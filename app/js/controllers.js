@@ -12,7 +12,7 @@ function HomeController($scope, $http, InstagramToken, instagram_search_url,user
         var config = {
             params: {
                 isbn : isbnStr,
-                userid: hash.substr(hash.indexOf('=')+1),
+                userid: $scope.token,
                 callback: 'JSON_CALLBACK'
             }
         };
@@ -23,7 +23,7 @@ function HomeController($scope, $http, InstagramToken, instagram_search_url,user
         var config = {
             params: {
                 isbn : isbnStr,
-                userid: hash.substr(hash.indexOf('=')+1),
+                userid: $scope.token,
                 callback: 'JSON_CALLBACK'
             }
         };
@@ -39,7 +39,7 @@ function HomeController($scope, $http, InstagramToken, instagram_search_url,user
         };
         var config2 = {
             params: {
-                userid: hash.substr(hash.indexOf('=')+1),
+                userid: $scope.token,
                 callback: 'JSON_CALLBACK'
             }
         };
@@ -61,15 +61,11 @@ function InstagramAuthController($location, InstagramToken, userLikeBookUrl, use
     //get samlValidate link/redeem token for piId
 
     var piId = hash.substr(hash.indexOf('=')+1);
-    $http({method: 'GET', url: '/api/validate/'+piId}).
-        success(function(data, status, headers, config) {
-            piId = data;
-            $scope.token = InstagramToken(piId);
-        }).
-        error(function(data, status, headers, config) {
-            // called asynchronously if an error occurs
-            // or server returns response with an error status.
-        });
+    var storeUserId = function(resp, status, headers, config){
+        piId = resp.data.id
+        $scope.token = InstagramToken(piId);
+    }
+    $http.jsonp(userNextUrl,config2).success(storeUserId);
 
     var successCallback = function(resp, status, headers, config){
         console.log(resp);
