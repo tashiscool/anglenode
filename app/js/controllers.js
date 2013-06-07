@@ -62,7 +62,7 @@ function InstagramAuthController($location, InstagramToken, userLikeBookUrl, use
 
     var piId = hash.substr(hash.indexOf('=')+1);
     var storeUserId = function(resp, status, headers, config){
-        piId = resp.data.id
+        piId = resp.data.id;
         $scope.token = InstagramToken(piId);
     }
     var config3 = {
